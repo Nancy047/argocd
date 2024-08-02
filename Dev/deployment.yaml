@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo
+  labels:
+    app: argo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argo
+  template:
+    metadata:
+      labels:
+        app: argo
+    spec:
+      containers:
+      - name: argo
+        image: us-central1-docker.pkg.dev/lumen-b-ctl-047/automation/argocd@sha256:915e1d599a60230ebb6da23c36c13be3b35c514a4e91ef40bd45d5a8642da6a2
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: argo
+  labels:
+    app: argo
+spec:
+  selector:
+    app: argo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
